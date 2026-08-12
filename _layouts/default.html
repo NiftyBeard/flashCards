@@ -2,24 +2,33 @@
 layout: base
 ---
 
-<div class="intro-header"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, 
+initial-scale=1.0">
+    <title>Flashcard App</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Flashcard Folders</h1>
+        <!-- Folder selection goes here -->
+        
+        <button id="new-test">New Test</button>
+        <button id="start-test">Start Test</button>
+        <button id="delete-test">Delete Test</button>
 
-<main class="{% if page.full-width %} container-fluid {% else %} container-md {% endif %}">
-  {% if page.before-content %}
-    <div class="before-content">
-      {% for file in page.before-content %}
-        {% include {{ file }} %}
-      {% endfor %}
+        <h2>New Flashcard</h2>
+        <input type="text" id="new-card-question" 
+placeholder="Question">
+        <input type="text" id="new-card-answer" 
+placeholder="Answer">
+        <button id="add-card">Add Card</button>
+
+        <ul id="flashcards"></ul>
     </div>
-  {% endif %}
-
-  {{ content }}
-
-  {% if page.after-content %}
-    <div class="after-content">
-      {% for file in page.after-content %}
-        {% include {{ file }} %}
-      {% endfor %}
-    </div>
-  {% endif %}
-</main>
+    <script src="/assets/js/script.js"></script>
+</body>
+</html>
