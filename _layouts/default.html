@@ -2,17 +2,14 @@
 layout: base
 ---
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, 
- initial-scale=1.0">
-     <title>Flashcard App</title>
-     <link rel="stylesheet" href="/assets/css/styles.css">
-     <link rel="manifest" href="/manifest.json">
-initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard App</title>
     <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     <div id="app">
@@ -24,21 +21,21 @@ initial-scale=1.0">
         <button id="delete-test">Delete Test</button>
 
         <h2>New Flashcard</h2>
-        <input type="text" id="new-card-question" 
-placeholder="Question">
-        <input type="text" id="new-card-answer" 
-placeholder="Answer">
+        <input type="text" id="new-card-question" placeholder="Question">
+        <input type="text" id="new-card-answer" placeholder="Answer">
         <button id="add-card">Add Card</button>
 
         <ul id="flashcards"></ul>
     </div>
+    
+    <!-- Ensure the service worker script is at the end of the body -->
     <script src="/assets/js/script.js"></script>
-     <script>
-         if ('serviceWorker' in navigator) {
-             window.addEventListener('load', () => {
-                 navigator.serviceWorker.register('/service-worker.js');
-             });
-         }
-     </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 </body>
 </html>
