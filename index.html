@@ -4,200 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
-            background-color: #f4f4f9;
-        }
-        .container {
-            width: 360px;
-        }
-        .folder-filter {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
-        .folder-filter select {
-            flex-grow: 1;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        .backup-controls, .test-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .backup-controls button, .test-controls button {
-            flex: 1;
-        }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            box-sizing: border-box;
-        }
-        .form-container h3 {
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        input, textarea, select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 14px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .btn-export { background-color: #28a745; }
-        .btn-export:hover { background-color: #218838; }
-        .btn-import { background-color: #17a2b8; }
-        .btn-import:hover { background-color: #138496; }
-        .btn-delete { background-color: #dc3545; }
-        .btn-delete:hover { background-color: #bd2130; }
-        .btn-test { background-color: #6f42c1; }
-        .btn-test:hover { background-color: #593196; }
-        .btn-end { background-color: #6c757d; }
-        .btn-end:hover { background-color: #5a6268; }
-
-        .card {
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            text-align: center;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-        .card-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .tag {
-            display: inline-block;
-            background: #e9ecef;
-            color: #495057;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-
-        /* Test Mode Styles */
-        .test-box {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .test-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #6c757d;
-            margin-bottom: 15px;
-        }
-        .mc-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .mc-btn {
-            background-color: #f8f9fa;
-            color: #212529;
-            border: 1px solid #ced4da;
-            text-align: left;
-            padding: 12px 15px;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        .mc-btn:hover:not(:disabled) {
-            background-color: #e2e6ea;
-        }
-        .mc-btn.correct {
-            background-color: #d4edda !important;
-            border-color: #28a745 !important;
-            color: #155724 !important;
-            font-weight: bold;
-        }
-        .mc-btn.incorrect {
-            background-color: #f8d7da !important;
-            border-color: #dc3545 !important;
-            color: #721c24 !important;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div class="container">
-        <!-- Topic / Folder Filter Header -->
-        <div class="folder-filter" id="folder-filter-wrap">
-            <label for="filter-folder"><strong>Topic:</strong></label>
-            <select id="filter-folder" onchange="switchFolder(this.value)">
-                <option value="All">All Topics</option>
-            </select>
+        <!-- Control Panel -->
+        <div class="controls-panel">
+            <div class="folder-filter" id="folder-filter-wrap">
+                <label for="filter-folder"><strong>Topic:</strong></label>
+                <select id="filter-folder" onchange="switchFolder(this.value)">
+                    <option value="All">All Topics</option>
+                </select>
+            </div>
+
+            <div class="backup-controls" id="backup-controls-wrap">
+                <button class="btn-export" onclick="exportCards()">Export JSON</button>
+                <button class="btn-import" onclick="document.getElementById('import-file').click()">Import JSON</button>
+                <input type="file" id="import-file" accept=".json" onchange="importCards(event)" style="display: none;">
+            </div>
+
+            <div class="test-controls" id="test-controls-wrap">
+                <button class="btn-test" id="btn-start-test" onclick="startTest()">Start Test Mode</button>
+                <button class="btn-end" id="btn-end-test" onclick="endTest()" style="display: none;">Exit Test Mode</button>
+            </div>
+
+            <div class="form-container" id="form-wrap">
+                <h3>Add New Flashcard</h3>
+                <input type="text" id="front" placeholder="Front Side">
+                <textarea id="back" placeholder="Back Side"></textarea>
+
+                <select id="card-folder" onchange="toggleCustomFolderInput(this.value)">
+                    <option value="General">General</option>
+                    <option value="__new__">+ Create New Topic...</option>
+                </select>
+                <input type="text" id="custom-folder" placeholder="Enter topic name..." style="display: none;">
+
+                <button onclick="addCard()">Add Card</button>
+            </div>
         </div>
 
-        <!-- Backup & Restore Controls -->
-        <div class="backup-controls" id="backup-controls-wrap">
-            <button class="btn-export" onclick="exportCards()">Export JSON</button>
-            <button class="btn-import" onclick="document.getElementById('import-file').click()">Import JSON</button>
-            <input type="file" id="import-file" accept=".json" onchange="importCards(event)" style="display: none;">
-        </div>
-
-        <!-- Test Trigger Bar -->
-        <div class="test-controls" id="test-controls-wrap">
-            <button class="btn-test" id="btn-start-test" onclick="startTest()">Start Test Mode</button>
-            <button class="btn-end" id="btn-end-test" onclick="endTest()" style="display: none;">Exit Test Mode</button>
-        </div>
-
-        <!-- Add Card Form -->
-        <div class="form-container" id="form-wrap">
-            <h3>Add New Flashcard</h3>
-            <input type="text" id="front" placeholder="Front Side">
-            <textarea id="back" placeholder="Back Side"></textarea>
-
-            <select id="card-folder" onchange="toggleCustomFolderInput(this.value)">
-                <option value="General">General</option>
-                <option value="__new__">+ Create New Topic...</option>
-            </select>
-            <input type="text" id="custom-folder" placeholder="Enter topic name..." style="display: none;">
-
-            <button onclick="addCard()">Add Card</button>
-        </div>
-
-        <!-- Dynamic Content Area -->
+        <!-- Dynamic Grid View -->
         <div id="main-content"></div>
     </div>
 
@@ -228,7 +75,6 @@
             },
         });
 
-        // Utility: Fisher-Yates array shuffle
         function shuffleArray(array) {
             const shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
@@ -296,7 +142,6 @@
             input.style.display = value === '__new__' ? 'block' : 'none';
         }
 
-        // --- TEST MODE LOGIC ---
         async function startTest() {
             const db = await dbPromise;
             let cards = currentFolder === 'All'
@@ -313,7 +158,6 @@
             currentTestIndex = 0;
             score = 0;
 
-            // Toggle visibility for Test Mode layout
             document.getElementById('form-wrap').style.display = 'none';
             document.getElementById('backup-controls-wrap').style.display = 'none';
             document.getElementById('folder-filter-wrap').style.display = 'none';
@@ -339,7 +183,6 @@
             const container = document.getElementById('main-content');
 
             if (currentTestIndex >= testQueue.length) {
-                // Test complete summary
                 const pct = Math.round((score / testQueue.length) * 100);
                 container.innerHTML = `
                     <div class="test-box">
@@ -359,16 +202,13 @@
             const db = await dbPromise;
             const allCards = await db.getAll('cards');
 
-            // Collect distractor choices from other cards
             let distractors = allCards
                 .map(c => c.back)
                 .filter(backVal => backVal !== currentCard.back);
 
-            // Deduplicate distractors
             distractors = Array.from(new Set(distractors));
             distractors = shuffleArray(distractors);
 
-            // Ensure 3 distractors exist using plausible fallback options if deck is small
             const fallbacks = ["None of the above", "All of the above", "Not enough info provided", "Opposite meaning"];
             let fallbackIdx = 0;
             while (distractors.length < 3) {
@@ -379,7 +219,6 @@
                 fallbackIdx++;
             }
 
-            // Shuffle 1 correct answer + 3 distractors
             const options = shuffleArray([
                 currentCard.back,
                 distractors[0],
@@ -394,7 +233,7 @@
                         <span>Question ${currentTestIndex + 1} of ${testQueue.length}</span>
                     </div>
                     <span class="tag">Prompt</span>
-                    <h2>${currentCard.front}</h2>
+                    <h2>${escapeHtml(currentCard.front)}</h2>
                     <div class="mc-options">
                         ${options.map(opt => `
                             <button class="mc-btn" onclick="handleAnswer(this, \`${escapeJsString(opt)}\`, \`${escapeJsString(currentCard.back)}\`)">
@@ -441,7 +280,6 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
-        // --- BACKUP & RESTORE LOGIC ---
         async function exportCards() {
             try {
                 const db = await dbPromise;
@@ -539,7 +377,7 @@
             container.innerHTML = '';
 
             if (cards.length === 0) {
-                container.innerHTML = '<p style="text-align:center;">No cards found in this topic.</p>';
+                container.innerHTML = '<p style="text-align:center; grid-column: 1 / -1;">No cards found in this topic.</p>';
                 return;
             }
 
@@ -548,8 +386,10 @@
                 cardElement.classList.add('card');
                 cardElement.dataset.flipped = 'false';
                 cardElement.innerHTML = `
-                    <span class="tag">${card.folder || 'General'}</span>
-                    <h2>${escapeHtml(card.front)}</h2>
+                    <div>
+                        <span class="tag">${card.folder || 'General'}</span>
+                        <h2>${escapeHtml(card.front)}</h2>
+                    </div>
                     <div class="card-actions">
                         <button onclick="flipCard(${card.id}, this)">Flip</button>
                         <button class="btn-delete" onclick="deleteCard(${card.id})">Delete</button>
@@ -559,7 +399,6 @@
             });
         }
 
-        // Global bindings
         window.addCard = addCard;
         window.deleteCard = deleteCard;
         window.flipCard = flipCard;
