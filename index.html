@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard App</title>
     <link rel="manifest" href="/manifest.json">
-    <!-- Load the idb library -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,12 +60,12 @@
     </div>
     <div class="card" id="flashcard">
         <h2>Front Side</h2>
-        <button onclick="flipCard()">Flip</button>
+        <button onclick="flipCard(1)">Flip</button> <!-- Assuming a default card ID for testing -->
     </div>
 
     <div id="card-list"></div>
 
-    <!-- Load the idb library -->
+    <!-- Load the idb library and script at the bottom of the body -->
     <script type="module">
         import { openDB } from 'https://cdn.jsdelivr.net/npm/idb/build/index.js';
 
