@@ -1,0 +1,244 @@
+/* CSS Custom Properties for easy future theming */
+:root {
+    --bg-color: #f4f4f9;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-border: #cccccc;
+    --subtle-text: #6c757d;
+    --tag-bg: #e9ecef;
+    --tag-color: #495057;
+
+    /* Theme Colors */
+    --primary: #007bff;
+    --primary-hover: #0056b3;
+    --success: #28a745;
+    --success-hover: #218838;
+    --info: #17a2b8;
+    --info-hover: #138496;
+    --danger: #dc3545;
+    --danger-hover: #bd2130;
+    --accent: #6f42c1;
+    --accent-hover: #593196;
+    --neutral: #6c757d;
+    --neutral-hover: #5a6268;
+
+    /* Test Feedback Colors */
+    --correct-bg: #d4edda;
+    --correct-border: #28a745;
+    --correct-text: #155724;
+    --incorrect-bg: #f8d7da;
+    --incorrect-border: #dc3545;
+    --incorrect-text: #721c24;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Centered Top Control Panel */
+.controls-panel {
+    max-width: 420px;
+    margin: 0 auto 20px auto;
+    width: 100%;
+}
+
+.folder-filter {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.folder-filter select {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--card-border);
+}
+
+.backup-controls, .test-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.backup-controls button, .test-controls button {
+    flex: 1;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.form-container h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+input, textarea, select {
+    padding: 10px;
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: white;
+    transition: background-color 0.15s ease-in-out;
+}
+
+button:hover { background-color: var(--primary-hover); }
+.btn-export { background-color: var(--success); }
+.btn-export:hover { background-color: var(--success-hover); }
+.btn-import { background-color: var(--info); }
+.btn-import:hover { background-color: var(--info-hover); }
+.btn-delete { background-color: var(--danger); }
+.btn-delete:hover { background-color: var(--danger-hover); }
+.btn-test { background-color: var(--accent); }
+.btn-test:hover { background-color: var(--accent-hover); }
+.btn-end { background-color: var(--neutral); }
+.btn-end:hover { background-color: var(--neutral-hover); }
+
+/* Responsive 4-Column Card Grid */
+#main-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    #main-content { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    #main-content { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+    #main-content { grid-template-columns: 1fr; }
+}
+
+.card {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+    background-color: var(--card-bg);
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card h2 {
+    font-size: 1.2rem;
+    word-break: break-word;
+    margin: 15px 0;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-color);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    align-self: center;
+}
+
+/* Test Mode Styling */
+.test-box {
+    grid-column: 1 / -1;
+    max-width: 420px;
+    width: 100%;
+    justify-self: center;
+    background: var(--card-bg);
+    padding: 25px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--subtle-text);
+    margin-bottom: 15px;
+}
+
+.mc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.mc-btn {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--card-border);
+    text-align: left;
+    padding: 12px 15px;
+    border-radius: 6px;
+}
+
+.mc-btn:hover:not(:disabled) {
+    filter: brightness(0.95);
+}
+
+.mc-btn.correct {
+    background-color: var(--correct-bg) !important;
+    border-color: var(--correct-border) !important;
+    color: var(--correct-text) !important;
+    font-weight: bold;
+}
+
+.mc-btn.incorrect {
+    background-color: var(--incorrect-bg) !important;
+    border-color: var(--incorrect-border) !important;
+    color: var(--incorrect-text) !important;
+}
