@@ -53,4 +53,19 @@ async function fetchCards() {
     return await store.getAll();
 }
 
-// Optionally, you can display cards on load or provide a button to view all cards
+async function showAllCards() {
+    const cards = await fetchCards();
+    const cardList = document.getElementById('card-list');
+    cardList.innerHTML = '';
+
+    if (cards.length === 0) {
+        cardList.innerHTML = '<p>No cards found.</p>';
+    } else {
+        cards.forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.innerHTML = `<h2>${card.front}</h2><button onclick="flipCard()">Flip</button>`;
+            cardList.appendChild(cardElement);
+        });
+    }
+}
