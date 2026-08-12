@@ -5,66 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard App</title>
     <link rel="manifest" href="/manifest.json">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-        }
-        .card {
-            width: 300px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            text-align: center;
-        }
-        .card h2 {
-            margin-top: 0;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        input, textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <input type="text" id="front" placeholder="Front Side">
-        <textarea id="back" placeholder="Back Side"></textarea>
-        <button onclick="addCard()">Add Card</button>
-        <button onclick="showAllCards()">Show All Cards</button>
-    </div>
-    <div class="card" id="flashcard">
-        <h2>Front Side</h2>
-        <button onclick="flipCard()">Flip</button>
-    </div>
-
-    <div id="card-list"></div>
-
     <!-- Load the idb library -->
     <script type="module">
         import { openDB } from 'https://cdn.jsdelivr.net/npm/idb/build/index.js';
@@ -129,5 +69,64 @@
             showAllCards();
         };
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .card {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            text-align: center;
+        }
+        .card h2 {
+            margin-top: 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <input type="text" id="front" placeholder="Front Side">
+        <textarea id="back" placeholder="Back Side"></textarea>
+        <button onclick="addCard()">Add Card</button>
+        <button onclick="showAllCards()">Show All Cards</button>
+    </div>
+    <div class="card" id="flashcard">
+        <h2>Front Side</h2>
+        <button onclick="flipCard()">Flip</button>
+    </div>
+
+    <div id="card-list"></div>
 </body>
 </html>
