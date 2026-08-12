@@ -1,3 +1,4 @@
+import { openDB } from 'idb';
 if (typeof idb === 'undefined') {
     console.error('The idb library was not found. Please ensure it is correctly included.');
 } else {
