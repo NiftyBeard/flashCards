@@ -69,3 +69,8 @@ async function showAllCards() {
         });
     }
 }
+
+// Optionally, display all cards when the page loads
+window.onload = () => {
+    showAllCards();
+};
