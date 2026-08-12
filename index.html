@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard App</title>
-    <link rel="manifest" href="/manifest.json">
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            padding: 40px;
             background-color: #f4f4f9;
         }
         .card {
@@ -22,9 +21,19 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: white;
             text-align: center;
+            margin-bottom: 15px;
         }
-        .card h2 {
-            margin-top: 0;
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+            margin-bottom: 30px;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         button {
             padding: 10px 20px;
@@ -38,34 +47,19 @@
         button:hover {
             background-color: #0056b3;
         }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        input, textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
+
     <div class="form-container">
         <input type="text" id="front" placeholder="Front Side">
         <textarea id="back" placeholder="Back Side"></textarea>
         <button onclick="addCard()">Add Card</button>
         <button onclick="showAllCards()">Show All Cards</button>
     </div>
-    <div class="card" id="flashcard">
-        <h2>Front Side</h2>
-        <button onclick="flipCard(1)">Flip</button> <!-- Assuming a default card ID for testing -->
-    </div>
 
     <div id="card-list"></div>
 
-    <!-- Load the idb library and script at the bottom of the body -->
     <script type="module">
         import { openDB } from 'https://cdn.jsdelivr.net/npm/idb/build/index.js';
 
@@ -81,59 +75,61 @@
             const front = document.getElementById('front').value;
             const back = document.getElementById('back').value;
 
+            if (!front || !back) return;
+
             try {
                 const db = await dbPromise;
-                const transaction = db.transaction(['cards'], 'readwrite');
-                const store = transaction.objectStore('cards');
-                const request = store.add({ front, back });
-
-                request.onsuccess = () => {
-                    console.log('Card added successfully!');
-                    document.getElementById('front').value = '';
-                    document.getElementById('back').value = '';
-                    showAllCards();
-                };
-
-                request.onerror = (event) => {
-                    console.error('Error adding card:', event.target.error);
-                };
+                await db.add('cards', { front, back });
+                document.getElementById('front').value = '';
+                document.getElementById('back').value = '';
+                showAllCards();
             } catch (error) {
-                console.error('Database error:', error);
-            }
-        }
-
-        async function fetchCards() {
-            try {
-                const db = await dbPromise;
-                const transaction = db.transaction(['cards'], 'readonly');
-                const store = transaction.objectStore('cards');
-                return await store.getAll();
-            } catch (error) {
-                console.error('Database error:', error);
+                console.error('Error adding card:', error);
             }
         }
 
         async function showAllCards() {
-            const cards = await fetchCards();
+            const db = await dbPromise;
+            const cards = await db.getAll('cards');
             const cardList = document.getElementById('card-list');
             cardList.innerHTML = '';
 
             if (cards.length === 0) {
                 cardList.innerHTML = '<p>No cards found.</p>';
-            } else {
-                cards.forEach(card => {
-                    const cardElement = document.createElement('div');
-                    cardElement.classList.add('card');
-                    cardElement.innerHTML = `<h2>${card.front}</h2><button onclick="flipCard(${card.id})">Flip</button>`;
-                    cardList.appendChild(cardElement);
-                });
+                return;
             }
+
+            cards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.dataset.flipped = 'false';
+                cardElement.innerHTML = `
+                    <h2>${card.front}</h2>
+                    <button onclick="flipCard(${card.id}, this)">Flip</button>
+                `;
+                cardList.appendChild(cardElement);
+            });
         }
 
-        // Optionally, display all cards when the page loads
-        window.onload = () => {
-            showAllCards();
-        };
+        async function flipCard(id, buttonElement) {
+            const cardElement = buttonElement.closest('.card');
+            const db = await dbPromise;
+            const card = await db.get('cards', id);
+            
+            const isFlipped = cardElement.dataset.flipped === 'true';
+            const heading = cardElement.querySelector('h2');
+            
+            heading.textContent = isFlipped ? card.front : card.back;
+            cardElement.dataset.flipped = (!isFlipped).toString();
+        }
+
+        // Bind functions to window so inline onclick handlers work
+        window.addCard = addCard;
+        window.showAllCards = showAllCards;
+        window.flipCard = flipCard;
+
+        // Initial render
+        showAllCards();
     </script>
 </body>
 </html>
