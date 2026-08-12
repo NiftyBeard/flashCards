@@ -1,77 +1,81 @@
-const dbPromise = idb.open('flashcards-db', 1, (upgradeDb) => {
-    if (!upgradeDb.objectStoreNames.contains('cards')) {
-        upgradeDb.createObjectStore('cards', { keyPath: 'id', autoIncrement: true });
-    }
-});
-
-let isFlipped = false;
-
-async function flipCard() {
-    const card = document.getElementById('flashcard');
-    if (isFlipped) {
-        card.innerHTML = `<h2>Front Side</h2><button onclick="flipCard()">Flip</button>`;
-    } else {
-        card.innerHTML = `<h2>Back Side</h2><button onclick="flipCard()">Flip</button>`;
-    }
-    isFlipped = !isFlipped;
-}
-
-async function addCard() {
-    const front = document.getElementById('front').value;
-    const back = document.getElementById('back').value;
-
-    if (front && back) {
-        try {
-            const db = await dbPromise;
-            const transaction = db.transaction(['cards'], 'readwrite');
-            const store = transaction.objectStore('cards');
-            const request = store.add({ front, back });
-
-            request.onsuccess = () => {
-                alert('Card added successfully!');
-                document.getElementById('front').value = '';
-                document.getElementById('back').value = '';
-                showAllCards(); // Refresh the displayed cards after adding a new one
-            };
-
-            request.onerror = (event) => {
-                console.error('Error adding card:', event.target.error);
-                alert('Failed to add card.');
-            };
-        } catch (error) {
-            console.error('Database error:', error);
-            alert('Database error. Please try again later.');
+if (typeof idb === 'undefined') {
+    console.error('The idb library was not found. Please ensure it is correctly included.');
+} else {
+    const dbPromise = idb.open('flashcards-db', 1, (upgradeDb) => {
+        if (!upgradeDb.objectStoreNames.contains('cards')) {
+            upgradeDb.createObjectStore('cards', { keyPath: 'id', autoIncrement: true });
         }
-    } else {
-        alert('Both front and back sides are required.');
+    });
+
+    let isFlipped = false;
+
+    async function flipCard() {
+        const card = document.getElementById('flashcard');
+        if (isFlipped) {
+            card.innerHTML = `<h2>Front Side</h2><button onclick="flipCard()">Flip</button>`;
+        } else {
+            card.innerHTML = `<h2>Back Side</h2><button onclick="flipCard()">Flip</button>`;
+        }
+        isFlipped = !isFlipped;
     }
-}
 
-async function fetchCards() {
-    const db = await dbPromise;
-    const transaction = db.transaction(['cards'], 'readonly');
-    const store = transaction.objectStore('cards');
-    return await store.getAll();
-}
+    async function addCard() {
+        const front = document.getElementById('front').value;
+        const back = document.getElementById('back').value;
 
-async function showAllCards() {
-    const cards = await fetchCards();
-    const cardList = document.getElementById('card-list');
-    cardList.innerHTML = '';
+        if (front && back) {
+            try {
+                const db = await dbPromise;
+                const transaction = db.transaction(['cards'], 'readwrite');
+                const store = transaction.objectStore('cards');
+                const request = store.add({ front, back });
 
-    if (cards.length === 0) {
-        cardList.innerHTML = '<p>No cards found.</p>';
-    } else {
-        cards.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('card');
-            cardElement.innerHTML = `<h2>${card.front}</h2><button onclick="flipCard()">Flip</button>`;
-            cardList.appendChild(cardElement);
-        });
+                request.onsuccess = () => {
+                    alert('Card added successfully!');
+                    document.getElementById('front').value = '';
+                    document.getElementById('back').value = '';
+                    showAllCards(); // Refresh the displayed cards after adding a new one
+                };
+
+                request.onerror = (event) => {
+                    console.error('Error adding card:', event.target.error);
+                    alert('Failed to add card.');
+                };
+            } catch (error) {
+                console.error('Database error:', error);
+                alert('Database error. Please try again later.');
+            }
+        } else {
+            alert('Both front and back sides are required.');
+        }
     }
-}
 
-// Optionally, display all cards when the page loads
-window.onload = () => {
-    showAllCards();
-};
+    async function fetchCards() {
+        const db = await dbPromise;
+        const transaction = db.transaction(['cards'], 'readonly');
+        const store = transaction.objectStore('cards');
+        return await store.getAll();
+    }
+
+    async function showAllCards() {
+        const cards = await fetchCards();
+        const cardList = document.getElementById('card-list');
+        cardList.innerHTML = '';
+
+        if (cards.length === 0) {
+            cardList.innerHTML = '<p>No cards found.</p>';
+        } else {
+            cards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.innerHTML = `<h2>${card.front}</h2><button onclick="flipCard()">Flip</button>`;
+                cardList.appendChild(cardElement);
+            });
+        }
+    }
+
+    // Optionally, display all cards when the page loads
+    window.onload = () => {
+        showAllCards();
+    };
+}
