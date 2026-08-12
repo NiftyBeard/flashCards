@@ -38,9 +38,25 @@
         button:hover {
             background-color: #0056b3;
         }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
+    <div class="form-container">
+        <input type="text" id="front" placeholder="Front Side">
+        <textarea id="back" placeholder="Back Side"></textarea>
+        <button onclick="addCard()">Add Card</button>
+    </div>
     <div class="card" id="flashcard">
         <h2>Front Side</h2>
         <button onclick="flipCard()">Flip</button>
