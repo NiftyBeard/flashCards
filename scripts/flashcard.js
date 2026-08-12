@@ -31,6 +31,7 @@ async function addCard() {
                 alert('Card added successfully!');
                 document.getElementById('front').value = '';
                 document.getElementById('back').value = '';
+                showAllCards(); // Refresh the displayed cards after adding a new one
             };
 
             request.onerror = (event) => {
