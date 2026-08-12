@@ -1,7 +1,7 @@
 if (typeof idb === 'undefined') {
     console.error('The idb library was not found. Please ensure it is correctly included.');
 } else {
-    const dbPromise = idb.open('flashcards-db', 1, (upgradeDb) => {
+    const dbPromise = openDB('flashcards-db', 1, (upgradeDb) => {
         if (!upgradeDb.objectStoreNames.contains('cards')) {
             upgradeDb.createObjectStore('cards', { keyPath: 'id', autoIncrement: true });
         }
