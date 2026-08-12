@@ -2,11 +2,14 @@
 layout: base
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, 
+     <meta name="viewport" content="width=device-width, 
+ initial-scale=1.0">
+     <title>Flashcard App</title>
+     <link rel="stylesheet" href="/assets/css/styles.css">
+     <link rel="manifest" href="/manifest.json">
 initial-scale=1.0">
     <title>Flashcard App</title>
     <link rel="stylesheet" href="/assets/css/styles.css">
@@ -30,5 +33,12 @@ placeholder="Answer">
         <ul id="flashcards"></ul>
     </div>
     <script src="/assets/js/script.js"></script>
+     <script>
+         if ('serviceWorker' in navigator) {
+             window.addEventListener('load', () => {
+                 navigator.serviceWorker.register('/service-worker.js');
+             });
+         }
+     </script>
 </body>
 </html>
